@@ -3,7 +3,13 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
-#define BACKGROUND_COLOR 0.85f, 0.85f, 0.85f, 1.0f
+#include "../include/renderer.h"
+#include "../include/phys.h"
+#include "../include/body.h"
+
+//#define BACKGROUND_COLOR 0.85f, 0.85f, 0.85f, 1.0f
+#define BACKGROUND_COLOR 0.25f, 0.25f, 0.25f, 1.0f
+#define SEC_PER_UPDATE 0.01
 
 GLFWwindow* window = nullptr;
 
@@ -29,26 +35,53 @@ bool gl_init(){
 	return true;
 }
 
+void adjust_window(int& width, int& height){
+	glfwGetFramebufferSize(window, &width, &height);
+	glViewport(0, 0, width, height);
+	glOrtho(0, width, 0, height, 0, 1);
+}
+
+void clear_context(){
+	glClear(GL_COLOR_BUFFER_BIT);
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+}
+
 int main(){
 
 	if(!gl_init())
 		return 1;
 
+	renderer& r = renderer::get_instance();
+	phys& p = phys::get_instance();
+	body::spawn(vec2d{300, 300}, 2, 25);
+	body::spawn(vec2d{100, 500}, 1, 25);
+	body::spawn(vec2d{500, 500}, 3, 25);
+
 	int width, height;
+	double prev = glfwGetTime();
+	double lag = 0.0;
+
 	while(!glfwWindowShouldClose(window)){
 
-		glfwGetFramebufferSize(window, &width, &height);
-		glViewport(0, 0, width, height);
-		glOrtho(0, width, 0, height, 0, 1);
+		double curr = glfwGetTime();
+		float dt = curr -prev;
+		prev = curr;
+		lag += dt;
 
-		glClear(GL_COLOR_BUFFER_BIT);
-		glMatrixMode(GL_PROJECTION);
-		glLoadIdentity();
+		glfwPollEvents();
 
+		adjust_window(width, height);
+		clear_context();
 
+		while(lag >= SEC_PER_UPDATE){
+			p.update(dt);
+			lag -= SEC_PER_UPDATE;
+		}
+
+		r.update();
 
 		glfwSwapBuffers(window);
-		glfwPollEvents();
 	}
 
 	glfwDestroyWindow(window);

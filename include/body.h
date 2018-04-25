@@ -7,11 +7,11 @@
 
 class body{
 
-static std::map<unsigned int, body*> bodies;
-static unsigned int next_id;
+	static std::map<unsigned int, body*> bodies;
+	static unsigned int next_id;
 
-unsigned int id;
-vec2d pos;
+	unsigned int id;
+	vec2d pos;
 
 public:
 	float mass;
@@ -26,12 +26,15 @@ public:
 	body(body const&) = delete;
 	void operator=(body const&) = delete;
 
+	static std::map<unsigned int, body*>::iterator begin();
+	static std::map<unsigned int, body*>::iterator end();
+
 	static body* spawn(float mass, float radius);
 	static body* spawn(const vec2d& pos, float mass, float radius);
 	void kill();
 
-	void add_pos(vec2d&);
-	void add_vel(vec2d&);
+	void add_pos(const vec2d&);
+	void add_vel(const vec2d&);
 
 	vec2d get_pos();
 
