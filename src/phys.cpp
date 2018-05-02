@@ -1,5 +1,8 @@
 #include "../include/phys.h"
-#include <iostream>
+
+float abs(float val){
+	return val < 0 ? -val : val;
+}
 
 phys& phys::get_instance(){
 	static phys instance;
@@ -14,10 +17,11 @@ void phys::update(float dt) const{
 
 void phys::update_body(float dt, body* b) const{
 
-	const vec2d pos = b->get_pos();
 	b->vel.y -= g *b->mass;
-	if(pos.y < b->radius)
-		b->vel.y *= -0.8;
+	if(b->pos.y < b->radius){
+		b->vel.y *= -b->dampening;
+		b->pos.y = b->radius;
+	}
 
 	update_position(dt, b);
 }

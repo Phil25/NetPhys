@@ -11,12 +11,14 @@ class body{
 	static unsigned int next_id;
 
 	unsigned int id;
-	vec2d pos;
 
 public:
+	vec2d pos;
+	vec2d vel;
+
 	float mass;
 	float radius;
-	vec2d vel;
+	float dampening = 0.75; // force dampening during collision
 
 private:
 	body(vec2d pos, float mass, float radius);
@@ -37,6 +39,7 @@ public:
 	void add_vel(const vec2d&);
 
 	vec2d get_pos();
+	int get_id();
 
 };
 

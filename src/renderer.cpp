@@ -3,6 +3,8 @@
 #include <GL/gl.h>
 #include <math.h>
 
+#include <iostream>
+
 renderer& renderer::get_instance(){
 	static renderer instance;
 	return instance;
@@ -25,6 +27,8 @@ void renderer::render_body(body* b) const{
 	const float step = pi2/quality;
 	float ang = 0.0f;
 	vec2d pos = b->get_pos();
+	if(b->get_id() == 3)
+		std::cout << "Pos: (" << pos.x << ", " << pos.y << ")" << std::endl;
 	float r = b->radius;
 	vec2d last = get_circle_pos(pos, r, ang);
 

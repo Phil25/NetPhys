@@ -1,4 +1,4 @@
 #!/bin/bash
 
 ./compile.sh
-./netphys
+./bin/netphys

@@ -3,18 +3,18 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
+#include "../include/cmd.h"
+#include "../include/input.h"
 #include "../include/renderer.h"
 #include "../include/phys.h"
 #include "../include/body.h"
 
-//#define BACKGROUND_COLOR 0.85f, 0.85f, 0.85f, 1.0f
 #define BACKGROUND_COLOR 0.25f, 0.25f, 0.25f, 1.0f
 #define SEC_PER_UPDATE 0.01
 
 GLFWwindow* window = nullptr;
 
 static void glfw_error(int err, const char* desc);
-static void on_key(GLFWwindow*, int key, int scancode, int action, int mods);
 
 bool gl_init(){
 
@@ -28,7 +28,6 @@ bool gl_init(){
 		return false;
 	}
 
-	glfwSetKeyCallback(window, on_key);
 	glfwMakeContextCurrent(window);
 	glClearColor(BACKGROUND_COLOR);
 
@@ -52,16 +51,14 @@ int main(){
 	if(!gl_init())
 		return 1;
 
+	input::init(window);
 	renderer& r = renderer::get_instance();
 	phys& p = phys::get_instance();
-	body::spawn(vec2d{300, 300}, 2, 25);
-	body::spawn(vec2d{100, 500}, 1, 25);
-	body::spawn(vec2d{500, 500}, 3, 25);
 
 	int width, height;
 	double prev = glfwGetTime();
 	double lag = 0.0;
-
+	
 	while(!glfwWindowShouldClose(window)){
 
 		double curr = glfwGetTime();
@@ -91,11 +88,4 @@ int main(){
 
 static void glfw_error(int err, const char* desc){
 	std::cerr << "Error " << err << ": " << desc << std::endl;
-}
-
-static void on_key(GLFWwindow* w, int key, int scancode, int action, int mods){
-	(void)scancode;
-	(void)mods;
-	if(key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-		glfwSetWindowShouldClose(w, GLFW_TRUE);
 }

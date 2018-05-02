@@ -54,3 +54,7 @@ void body::add_vel(const vec2d& vel){
 vec2d body::get_pos(){
 	return this->pos;
 }
+
+int body::get_id(){
+	return this->id;
+}
