@@ -14,7 +14,6 @@ void input::process(GLFWwindow* w, int key, int scancode, int action, int mods){
 	(void)w;
 	(void)scancode;
 	(void)mods;
-	if(action == GLFW_PRESS){
+	if(action == GLFW_PRESS && cmds.count(key))
 		cmds.at(key)->exec(w);
-	}
 }

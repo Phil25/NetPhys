@@ -38,8 +38,9 @@ public:
 	void add_pos(const vec2d&);
 	void add_vel(const vec2d&);
 
-	vec2d get_pos();
 	int get_id();
+
+	bool colliding(body*);
 
 };
 

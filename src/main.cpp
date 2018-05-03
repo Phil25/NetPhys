@@ -40,6 +40,13 @@ void adjust_window(int& width, int& height){
 	glOrtho(0, width, 0, height, 0, 1);
 }
 
+void assign_edges(float bottom, float left, float top, float right){
+	BOTTOM = bottom;
+	LEFT = left;
+	TOP = top;
+	RIGHT = right;
+}
+
 void clear_context(){
 	glClear(GL_COLOR_BUFFER_BIT);
 	glMatrixMode(GL_PROJECTION);
@@ -51,13 +58,13 @@ int main(){
 	if(!gl_init())
 		return 1;
 
-	input::init(window);
-	renderer& r = renderer::get_instance();
-	phys& p = phys::get_instance();
-
 	int width, height;
 	double prev = glfwGetTime();
 	double lag = 0.0;
+
+	input::init(window);
+	renderer& r = renderer::get_instance();
+	phys& p = phys::get_instance();
 	
 	while(!glfwWindowShouldClose(window)){
 
@@ -69,6 +76,7 @@ int main(){
 		glfwPollEvents();
 
 		adjust_window(width, height);
+		assign_edges(0, 0, height, width);
 		clear_context();
 
 		while(lag >= SEC_PER_UPDATE){

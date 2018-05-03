@@ -51,10 +51,11 @@ void body::add_vel(const vec2d& vel){
 	this->vel += vel;
 }
 
-vec2d body::get_pos(){
-	return this->pos;
-}
-
 int body::get_id(){
 	return this->id;
+}
+
+bool body::colliding(body* b){
+	float dist= radius +b->radius;
+	return pos.distance(b->pos, true) < dist *dist;
 }

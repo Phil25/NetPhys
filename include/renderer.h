@@ -8,7 +8,9 @@
 class renderer{
 
 	const float pi = 3.1415926535f;
-	const float pi2 = 6.28318530718f;
+	const float tau = 6.28318530718f;
+
+	const float step = tau/24;
 
 private:
 	renderer(){}
@@ -21,6 +23,9 @@ public:
 
 	void update() const;
 	void render_body(body*) const;
+
+private:
+	void draw(const vec2d&, const vec2d&) const;
 
 };
 

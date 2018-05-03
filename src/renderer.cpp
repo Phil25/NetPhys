@@ -3,8 +3,6 @@
 #include <GL/gl.h>
 #include <math.h>
 
-#include <iostream>
-
 renderer& renderer::get_instance(){
 	static renderer instance;
 	return instance;
@@ -23,22 +21,18 @@ vec2d get_circle_pos(const vec2d& o, float r, float ang){
 void renderer::render_body(body* b) const{
 	glBegin(GL_POLYGON);
 
-	const int quality = 30;
-	const float step = pi2/quality;
 	float ang = 0.0f;
-	vec2d pos = b->get_pos();
-	if(b->get_id() == 3)
-		std::cout << "Pos: (" << pos.x << ", " << pos.y << ")" << std::endl;
-	float r = b->radius;
-	vec2d last = get_circle_pos(pos, r, ang);
-
-	for(int i = 0; i <= quality; i++){
-		vec2d p = get_circle_pos(pos, r, ang);
-		glVertex2f(last.x, last.y);
-		glVertex2f(p.x, p.y);
+	vec2d last = get_circle_pos(b->pos, b->radius, ang);
+	for(ang = step; ang < tau; ang += step){
+		vec2d p = get_circle_pos(b->pos, b->radius, ang);
+		draw(last, p);
 		last = p;
-		ang += step;
 	}
 
 	glEnd();
+}
+
+void renderer::draw(const vec2d& p1, const vec2d& p2) const{
+	glVertex2f(p1.x, p1.y);
+	glVertex2f(p2.x, p2.y);
 }
