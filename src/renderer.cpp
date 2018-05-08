@@ -1,26 +1,21 @@
 #include "../include/renderer.h"
-#include "../include/body.h"
-#include <GL/gl.h>
-#include <math.h>
 
-renderer& renderer::get_instance(){
-	static renderer instance;
-	return instance;
+namespace renderer{
+	int width, height;
+	GLFWwindow* window;
 }
 
-void renderer::update() const{
-	auto end = body::end();
-	for(auto it = body::begin(); it != end; it++)
-		render_body(it->second);
+void renderer::geo::draw(const vec2d& p1, const vec2d& p2){
+	glVertex2f(p1.x, p1.y);
+	glVertex2f(p2.x, p2.y);
 }
 
-vec2d get_circle_pos(const vec2d& o, float r, float ang){
+vec2d renderer::geo::get_circle_pos(const vec2d& o, float r, float ang){
 	return vec2d{o.x +r *cos(ang), o.y +r *sin(ang)};
 }
 
-void renderer::render_body(body* b) const{
+void renderer::geo::render_body(body* b){
 	glBegin(GL_POLYGON);
-
 	float ang = 0.0f;
 	vec2d last = get_circle_pos(b->pos, b->radius, ang);
 	for(ang = step; ang < tau; ang += step){
@@ -32,7 +27,36 @@ void renderer::render_body(body* b) const{
 	glEnd();
 }
 
-void renderer::draw(const vec2d& p1, const vec2d& p2) const{
-	glVertex2f(p1.x, p1.y);
-	glVertex2f(p2.x, p2.y);
+GLFWwindow* renderer::init(){
+	if(!glfwInit())
+		return NULL;
+
+	window = glfwCreateWindow(640, 640, "Test", NULL, NULL);
+	if(!window){
+		glfwTerminate();
+		return NULL;
+	}
+
+	glfwMakeContextCurrent(window);
+	glClearColor(BACKGROUND_COLOR);
+
+	return window;
+}
+
+void renderer::resize(){
+	glfwGetFramebufferSize(window, &width, &height);
+	glViewport(0, 0, width, height);
+	glOrtho(0, width, 0, height, 0, 1);
+}
+
+void renderer::clear(){
+	glClear(GL_COLOR_BUFFER_BIT);
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+}
+
+void renderer::update(){
+	auto end = body::end();
+	for(auto it = body::begin(); it != end; it++)
+		geo::render_body(it->second);
 }

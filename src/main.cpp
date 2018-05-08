@@ -9,63 +9,21 @@
 #include "../include/phys.h"
 #include "../include/body.h"
 
-#define BACKGROUND_COLOR 0.25f, 0.25f, 0.25f, 1.0f
 #define SEC_PER_UPDATE 0.01
-
-GLFWwindow* window = nullptr;
 
 static void glfw_error(int err, const char* desc);
 
-bool gl_init(){
-
-	glfwSetErrorCallback(glfw_error);
-	if(!glfwInit())
-		return false;
-
-	window = glfwCreateWindow(640, 640, "Test", NULL, NULL);
-	if(!window){
-		glfwTerminate();
-		return false;
-	}
-
-	glfwMakeContextCurrent(window);
-	glClearColor(BACKGROUND_COLOR);
-
-	return true;
-}
-
-void adjust_window(int& width, int& height){
-	glfwGetFramebufferSize(window, &width, &height);
-	glViewport(0, 0, width, height);
-	glOrtho(0, width, 0, height, 0, 1);
-}
-
-void assign_edges(float bottom, float left, float top, float right){
-	BOTTOM = bottom;
-	LEFT = left;
-	TOP = top;
-	RIGHT = right;
-}
-
-void clear_context(){
-	glClear(GL_COLOR_BUFFER_BIT);
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-}
-
 int main(){
 
-	if(!gl_init())
+	GLFWwindow* window = renderer::init();
+	if(window == NULL)
 		return 1;
 
-	int width, height;
 	double prev = glfwGetTime();
 	double lag = 0.0;
 
 	input::init(window);
-	renderer& r = renderer::get_instance();
-	phys& p = phys::get_instance();
-	
+
 	while(!glfwWindowShouldClose(window)){
 
 		double curr = glfwGetTime();
@@ -75,16 +33,16 @@ int main(){
 
 		glfwPollEvents();
 
-		adjust_window(width, height);
-		assign_edges(0, 0, height, width);
-		clear_context();
+		renderer::resize();
+		phys::resize(0, 0, renderer::height, renderer::width);
+		renderer::clear();
 
 		while(lag >= SEC_PER_UPDATE){
-			p.update(dt);
+			phys::update(dt);
 			lag -= SEC_PER_UPDATE;
 		}
 
-		r.update();
+		renderer::update();
 
 		glfwSwapBuffers(window);
 	}

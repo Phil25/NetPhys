@@ -3,35 +3,25 @@
 #ifndef PHYS_H
 #define PHYS_H
 
+
 #define BOTTOM phys::edges[0]
 #define LEFT phys::edges[1]
 #define TOP phys::edges[2]
 #define RIGHT phys::edges[3]
 
-class phys{
+namespace phys{
+	extern float edges[4];
 
-public:
-	// screen edges
-	// 0 - bottom, 1 - left, 2 - top, 3 - right
-	static float edges[4];
+	namespace engine{
+		void collision(body* b, bool horizontal);
+		void collision(body* a, body* b);
+		void update_position(float dt, body* b);
+		void update_body(float dt, body* b);
+	}
 
-private:
-	phys(){}
+	void resize(float, float, float, float);
+	void update(float);
+}
 
-public:
-	static phys& get_instance();
-
-	phys(phys const&) = delete;
-	void operator=(phys const&) = delete;
-
-	void update(float) const;
-
-private:
-	void update_body(float, body*) const;
-	void collision(body*, bool) const;
-	void collision(body*, body*) const;
-	void update_position(float, body*) const;
-
-};
 
 #endif

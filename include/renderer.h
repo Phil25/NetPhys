@@ -1,3 +1,4 @@
+#include <GLFW/glfw3.h>
 #include "body.h"
 
 
@@ -5,29 +6,28 @@
 #define RENDERER_H
 
 
-class renderer{
+#define BACKGROUND_COLOR 0.25f, 0.25f, 0.25f, 1.0f
 
+namespace renderer{
 	const float pi = 3.1415926535f;
 	const float tau = 6.28318530718f;
-
 	const float step = tau/24;
 
-private:
-	renderer(){}
+	extern int width, height;
+	extern GLFWwindow* window;
 
-public:
-	static renderer& get_instance();
+	namespace geo{
+		void draw(const vec2d& p1, const vec2d& p2);
+		vec2d get_circle_pos(const vec2d& o, float r, float ang);
+		void render_body(body*);
+	}
 
-	renderer(renderer const&) = delete;
-	void operator=(renderer const&) = delete;
+	GLFWwindow* init();
+	void resize();
+	void clear();
+	void update();
 
-	void update() const;
-	void render_body(body*) const;
-
-private:
-	void draw(const vec2d&, const vec2d&) const;
-
-};
+}
 
 
 #endif
