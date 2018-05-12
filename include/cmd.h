@@ -28,9 +28,9 @@ class spawn : public root{
 
 public:
 	virtual void exec(GLFWwindow*){
-		body* a = body::spawn(vec2d{500, 500}, 50, 100);
+		body* a = body::spawn(vec2d{100, 500}, 50, 100);
 		a->dampening = 1;
-		a->vel.x = 200;
+		a->vel.x = 500;
 		a->vel.y = 100;
 	}
 };

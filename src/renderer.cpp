@@ -15,6 +15,7 @@ vec2d renderer::geo::get_circle_pos(const vec2d& o, float r, float ang){
 }
 
 void renderer::geo::render_body(body* b){
+	glColor3f(1.0, 0.0, 0.0);
 	glBegin(GL_POLYGON);
 	float ang = 0.0f;
 	vec2d last = get_circle_pos(b->pos, b->radius, ang);
@@ -31,7 +32,7 @@ GLFWwindow* renderer::init(){
 	if(!glfwInit())
 		return NULL;
 
-	window = glfwCreateWindow(640, 640, "Test", NULL, NULL);
+	window = glfwCreateWindow(640, 640, "NetPhys", NULL, NULL);
 	if(!window){
 		glfwTerminate();
 		return NULL;

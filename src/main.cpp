@@ -1,7 +1,6 @@
 #include <iostream>
 #include <string.h>
 #include <GL/glew.h>
-#include <GLFW/glfw3.h>
 
 #include "../include/cmd.h"
 #include "../include/input.h"
@@ -13,7 +12,7 @@
 
 static void glfw_error(int err, const char* desc);
 
-int main(){
+int main(int, char**){
 
 	GLFWwindow* window = renderer::init();
 	if(window == NULL)
